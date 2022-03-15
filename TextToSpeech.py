@@ -120,6 +120,10 @@ def respond(voice):
 
     elif 'kết thúc' in voice:
         return False
+
+    elif 'chào' in voice:
+        res = ['chào bạn','xin chào','hế lô']
+        talk(rd.choice(res))
     
     else:
         for i in badword:
@@ -129,6 +133,8 @@ def respond(voice):
                 return
         res = str(voice)+' không có trong từ điển của tôi'
         talk(res)
+
+
 
 
 cont = True

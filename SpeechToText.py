@@ -1,6 +1,9 @@
-﻿import speech_recognition as sr
-import pyaudio
-import wave
+﻿# import speech_recognition as sr
+# import pyaudio
+# import wave
+
+print(1+1)
+
 
 
 #CHUNK = 1024
@@ -41,30 +44,30 @@ import wave
 
 
 #filename = "sth.wav"
-def playBot(command):
-    command = command.split("bài hát ")[1]
-    print(command)
+# def playBot(command):
+#     command = command.split("bài hát ")[1]
+#     print(command)
 
-r = sr.Recognizer()
-cont = True
-while(cont):
-    with sr.Microphone() as source:
-        audio_data = r.record(source, duration=3)
-        print("Recognizing...")
-        # convert speech to text
-        text = ""
-        try:
-            text = r.recognize_google(audio_data, language="vi-VN")
-            print(text)
-        except:
-            cont = True
+# r = sr.Recognizer()
+# cont = True
+# while(cont):
+#     with sr.Microphone() as source:
+#         audio_data = r.record(source, duration=3)
+#         print("Recognizing...")
+#         # convert speech to text
+#         text = ""
+#         try:
+#             text = r.recognize_google(audio_data, language="vi-VN")
+#             print(text)
+#         except:
+#             cont = True
 
-    #if text.lower().__contains__("f***"):
-    #    print("Hey! Language!!")
-    #else:
-    #    print("Haizzz...")
+#     #if text.lower().__contains__("f***"):
+#     #    print("Hey! Language!!")
+#     #else:
+#     #    print("Haizzz...")
 
-    if text.lower().__contains__("hỗ trợ dừng"):
-        cont = False
-    if text.lower().__contains__("phát bài hát"):
-        playBot(text)
+#     if text.lower().__contains__("hỗ trợ dừng"):
+#         cont = False
+#     if text.lower().__contains__("phát bài hát"):
+#         playBot(text)
