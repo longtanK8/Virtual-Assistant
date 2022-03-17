@@ -120,6 +120,9 @@ def ageRecognize():
             cv2.putText(resultImg, f'{gender}, {age}', (faceBox[0], faceBox[1]-10), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,255,255), 2, cv2.LINE_AA)
             cv2.imshow("Detecting age and gender", resultImg)
 
+    video.release()
+    cv2.destroyAllWindows()
+
 #response processing
 def respond(voice):
     if 'tên gì' in voice or 'là ai' in voice:
@@ -130,10 +133,10 @@ def respond(voice):
         else:
             return 
 
-    elif 'nhận diện tuổi' in voice:
+    elif 'nhận diện độ tuổi' in voice:
         talk('đang khởi động trình nhận diện tuổi')
         ageRecognize()
-
+            
 
     elif 'tra cứu' in voice:
         result = record_audio('bạn cần tra cứu gì')
