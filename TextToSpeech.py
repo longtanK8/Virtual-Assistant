@@ -92,36 +92,43 @@ def ageRecognize():
     video=cv2.VideoCapture(args.image if args.image else 0)
     padding=20
     while cv2.waitKey(1)<0 :
-        hasFrame,frame=video.read()
-        if not hasFrame:
-            cv2.waitKey()
-            break
+        try:
+            hasFrame,frame=video.read()
+            if not hasFrame:
+                cv2.waitKey()
+                break
     
-        resultImg,faceBoxes=highlightFace(faceNet,frame)
-        if not faceBoxes:
-            print("No face detected")
+            resultImg,faceBoxes=highlightFace(faceNet,frame)
+            if not faceBoxes:
+                print("No face detected")
+                cv2.imshow("Detecting age and gender", frame)
+            else:
+                for faceBox in faceBoxes:
+                    face=frame[max(0,faceBox[1]-padding):
+                               min(faceBox[3]+padding,frame.shape[0]-1),max(0,faceBox[0]-padding)
+                               :min(faceBox[2]+padding, frame.shape[1]-1)]
 
-        for faceBox in faceBoxes:
-            face=frame[max(0,faceBox[1]-padding):
-                       min(faceBox[3]+padding,frame.shape[0]-1),max(0,faceBox[0]-padding)
-                       :min(faceBox[2]+padding, frame.shape[1]-1)]
+                    blob=cv2.dnn.blobFromImage(face, 1.0, (227,227), MODEL_MEAN_VALUES, swapRB=False)
+                    genderNet.setInput(blob)
+                    genderPreds=genderNet.forward()
+                    gender=genderList[genderPreds[0].argmax()]
+                    print(f'Gender: {gender}')
 
-            blob=cv2.dnn.blobFromImage(face, 1.0, (227,227), MODEL_MEAN_VALUES, swapRB=False)
-            genderNet.setInput(blob)
-            genderPreds=genderNet.forward()
-            gender=genderList[genderPreds[0].argmax()]
-            print(f'Gender: {gender}')
+                    ageNet.setInput(blob)
+                    agePreds=ageNet.forward()
+                    age=ageList[agePreds[0].argmax()]
+                    print(f'Age: {age[1:-1]} years')
 
-            ageNet.setInput(blob)
-            agePreds=ageNet.forward()
-            age=ageList[agePreds[0].argmax()]
-            print(f'Age: {age[1:-1]} years')
+                    cv2.putText(resultImg, f'{gender}, {age}', (faceBox[0], faceBox[1]-10), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,255,255), 2, cv2.LINE_AA)
+                    cv2.imshow("Detecting age and gender", resultImg)
 
-            cv2.putText(resultImg, f'{gender}, {age}', (faceBox[0], faceBox[1]-10), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,255,255), 2, cv2.LINE_AA)
-            cv2.imshow("Detecting age and gender", resultImg)
+        except:
+            talk('xảy ra lỗi, vui lòng thử lại sau')
+            break;
 
     video.release()
     cv2.destroyAllWindows()
+    talk('đang kết thúc nhận diện độ tuổi')
 
 #response processing
 def respond(voice):
